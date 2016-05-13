@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/mijime/lipio/pipe"
@@ -34,7 +34,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Fprintln(os.Stderr, pipe.NotMatchError)
+			log.Println(pipe.NotMatchError)
 			os.Exit(1)
 			return
 		}
@@ -42,7 +42,7 @@ to quickly create a Cobra application.`,
 		p, pipeErr := pipe.NewPipe(pipe.Option{Scheme: args[0]})
 
 		if pipeErr != nil {
-			fmt.Fprintln(os.Stderr, pipeErr)
+			log.Println(pipeErr)
 			os.Exit(1)
 			return
 		}
@@ -50,7 +50,7 @@ to quickly create a Cobra application.`,
 		_, execErr := p.Execute(os.Stdout, os.Stdin)
 
 		if execErr != nil {
-			fmt.Fprintln(os.Stderr, execErr)
+			log.Println(execErr)
 			os.Exit(1)
 			return
 		}

@@ -3,6 +3,7 @@ package serv
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
@@ -29,6 +30,7 @@ func (s *httpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if readErr != nil {
 		w.WriteHeader(http.StatusNotAcceptable)
 		fmt.Fprintln(w, readErr)
+		log.Println(readErr)
 		return
 	}
 
@@ -38,6 +40,7 @@ func (s *httpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if copyErr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintln(w, copyErr)
+			log.Println(copyErr)
 			return
 		}
 	}

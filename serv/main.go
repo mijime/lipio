@@ -1,0 +1,3 @@
+package serv
+
+func Import() {}

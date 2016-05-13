@@ -5,22 +5,24 @@ import (
 	"mime/multipart"
 	"net/http"
 	"regexp"
+
+	"github.com/mijime/lipio/common"
 )
 
 func init() {
-	AddPipeFactory(httpPipeFactory{})
+	common.AddPipeFactory(httpPipeFactory{})
 }
 
 type httpPipeFactory struct{}
 
-var httpRegexp = regexp.MustCompile("https?://.+")
+var httpRegexp = regexp.MustCompile("https?")
 
-func (r httpPipeFactory) Match(o Option) bool {
-	return httpRegexp.Match([]byte(o.Scheme))
+func (r httpPipeFactory) Match(o common.Option) bool {
+	return httpRegexp.Match([]byte(o.URL.Scheme))
 }
 
-func (r httpPipeFactory) Create(o Option) (Pipe, error) {
-	return &httpPipe{Url: o.Scheme, Method: "POST"}, nil
+func (r httpPipeFactory) Create(o common.Option) (common.Pipe, error) {
+	return &httpPipe{Url: o.Raw, Method: "POST"}, nil
 }
 
 type httpPipe struct {

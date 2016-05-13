@@ -15,16 +15,12 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 
-	"github.com/mijime/lipio/serv"
+	"github.com/mijime/lipio/common"
 	"github.com/spf13/cobra"
-)
-
-var (
-	path, addr string
 )
 
 // servCmd represents the serv command
@@ -38,18 +34,29 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		h, handleErr := serv.NewHandler(serv.Option{})
-
-		if handleErr != nil {
-			fmt.Fprintln(os.Stderr, handleErr)
+		if len(args) < 1 {
+			log.Println(common.NotMatchError)
+			os.Exit(1)
 			return
 		}
 
-		http.Handle(path, h)
-		servErr := http.ListenAndServe(addr, nil)
+		o, _ := common.ParseOption(args[0])
+		h, handleErr := common.NewHandler(o)
+
+		if handleErr != nil {
+			log.Println(handleErr)
+			return
+		}
+
+		if o.URL.Path != "" {
+			http.Handle(o.URL.Path, h)
+		} else {
+			http.Handle("/", h)
+		}
+		servErr := http.ListenAndServe(o.URL.Host, nil)
 
 		if servErr != nil {
-			fmt.Fprintln(os.Stderr, servErr)
+			log.Println(servErr)
 			return
 		}
 	},
@@ -57,7 +64,4 @@ to quickly create a Cobra application.`,
 
 func init() {
 	RootCmd.AddCommand(servCmd)
-
-	servCmd.Flags().StringVarP(&addr, "addr", "a", ":8080", "Help message for toggle")
-	servCmd.Flags().StringVarP(&path, "path", "p", "/", "Help message for toggle")
 }

@@ -1,13 +1,6 @@
-package serv
+package common
 
-import (
-	"errors"
-	"net/http"
-)
-
-type Option struct{}
-
-var NotMatchError = errors.New("Not match handler")
+import "net/http"
 
 func NewHandler(o Option) (http.Handler, error) {
 	for _, f := range handlerFactories {

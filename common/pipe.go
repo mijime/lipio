@@ -1,15 +1,6 @@
-package pipe
+package common
 
-import (
-	"errors"
-	"io"
-)
-
-var NotMatchError = errors.New("Not match pipe")
-
-type Option struct {
-	Scheme string
-}
+import "io"
 
 type PipeFactory interface {
 	Match(o Option) bool

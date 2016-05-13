@@ -14,8 +14,17 @@
 
 package main
 
-import "github.com/mijime/lipio/cmd"
+import (
+	"github.com/mijime/lipio/cmd"
+	"github.com/mijime/lipio/pipe"
+	"github.com/mijime/lipio/serv"
+)
 
 func main() {
 	cmd.Execute()
+}
+
+func init() {
+	serv.Import()
+	pipe.Import()
 }

@@ -2,9 +2,9 @@ lipio
 ===
 
 ```
-lipio serv --addr :8081 | gunzip
-lipio serv --addr :8080 | sed s/hello/world/g | lipio post http://localhost:8081
-echo test | gzip | lipio post http://localhost:8080
+lipio serv ws://:8080 | gunzip > path/to/file
+lipio serv ws://:8081 | lipio pipe ws://localhost:8080
+cat path/to/file | gzip | lipio pipe ws://localhost:8080
 ```
 
 ```

@@ -6,20 +6,25 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
+
+	"github.com/mijime/lipio/common"
 )
 
 func init() {
-	AddHandlerFactory(httpHandlerFactory{})
+	common.AddHandlerFactory(httpHandlerFactory{})
 }
+
+var httpRegexp = regexp.MustCompile("https?")
 
 type httpHandlerFactory struct{}
 
-func (f httpHandlerFactory) Create(o Option) (http.Handler, error) {
+func (f httpHandlerFactory) Create(o common.Option) (http.Handler, error) {
 	return &httpHandler{}, nil
 }
 
-func (f httpHandlerFactory) Match(o Option) bool {
-	return true
+func (f httpHandlerFactory) Match(o common.Option) bool {
+	return httpRegexp.Match([]byte(o.URL.Scheme))
 }
 
 type httpHandler struct{}
